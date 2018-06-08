@@ -3,19 +3,15 @@ import { connect } from 'react-redux';
 
 import Person from '../components/Person/Person';
 import AddPerson from '../components/AddPerson/AddPerson';
-
-import * as actionTypes from '../store/actions';
+import * as actionTypes from './store/actions';
 
 class Persons extends Component {
-    state = {
-        persons: []
-    }
 
     render () {
         return (
             <div>
-                <AddPerson personAdded={this.props.onAddPerson} />
-                {this.state.persons.map(person => (
+                <AddPerson personAdded={this.props.onAddedPerson} />
+                {this.props.prs.map(person => (
                     <Person 
                         key={person.id}
                         name={person.name} 
@@ -30,14 +26,15 @@ class Persons extends Component {
 const mapStateToProps = state => {
     return {
         prs: state.persons
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddedPerson: () => dispatch({type: actionTypes.ADD_PERSON}),
+        onRemovedPerson: (id) => dispatch({type: actionTypes.REMOVE_PERSON, personId: id})
     }
 };
 
-const mapDispatchToProps = dispatch =>  {
-    return {
-        onAddPerson: () => dispatch({type: actionTypes.ADD_PERSON}), 
-        onRemovedPerson: (id) => dispatch({type: actionTypes.REMOVE_PERSON}, personId: id)
-    }
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Persons)
